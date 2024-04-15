@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="main.css" />
+    <title>Memory Game</title>
+  </head>
+  <body>
+    <div class="control-buttons">
+      <div>
+        <label for="img-count">Set Images Count:</label>
+        <select class="select" name="img-count" id="img-count">
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="30">30</option>
+          <option value="42">42</option>
+        </select>
+        <span>Start Game</span>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="head">
+        <div class="name">
+          Hello:
+          <span></span>
+        </div>
+        <span class="timer">60</span>
+        <div class="tries">
+          Wrong Tries:
+          <span>0</span>
+        </div>
+      </div>
+      <div class="blocks">
+        <div class="game-block" data-technology="angular">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="/images/icons8-angularjs-240.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="angular">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="/images/icons8-angularjs-240.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="vue">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="images/icons8-vuejs-240.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="vue">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="images/icons8-vuejs-240.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="gulp">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="images/icons8-gulp-256.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="gulp">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="images/icons8-gulp-256.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="html">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="images/icons8-html-240.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="html">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="images/icons8-html-240.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="css">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="images/icons8-css-240.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="css">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="images/icons8-css-240.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="github">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="images/icons8-github-250.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="github">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="images/icons8-github-250.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="react">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="images/icons8-react-240.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="react">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="images/icons8-react-240.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="python">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="images/icons8-python-240.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="python">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="images/icons8-python-240.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="mongo">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="images/icons8-mongodb-240.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="mongo">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="images/icons8-mongodb-240.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="html2">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="images/icons8-html2.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="html2">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="images/icons8-html2.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="c++">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="images/c++.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="c++">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="images/c++.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="c">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="images/c.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="c">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="images/c.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="php">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="images/icons8-php-240.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="php">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="images/icons8-php-240.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="java">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="images/icons8-java-240.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="java">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="images/icons8-java-240.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="google">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="images/icons8-google-240.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="google">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="images/icons8-google-240.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="twitter">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="images/icons8-twitter-240.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="twitter">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="images/icons8-twitter-240.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="facebook">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="images/icons8-facebook-240.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="facebook">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="images/icons8-facebook-240.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="instagram">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="images/icons8-instagram-240.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="instagram">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="images/icons8-instagram-240.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="chatgpt">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="images/icons8-chatgpt-240.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="chatgpt">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="images/icons8-chatgpt-240.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="youtube">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="images/icons8-youtube-240.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="youtube">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="images/icons8-youtube-240.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="telegram">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="images/icons8-telegram-240.png" alt="" />
+          </div>
+        </div>
+        <div class="game-block" data-technology="telegram">
+          <div class="face front"></div>
+          <div class="face back">
+            <img src="images/icons8-telegram-240.png" alt="" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <audio id="success" src="sounds/succes.mp3" preload="auto"></audio>
+      <audio
+        id="fail"
+        src="sounds/wronganswer-37702.mp3"
+        preload="auto"
+      ></audio>
+      <audio id="click" src="sounds/click.mp3" preload="auto"></audio>
+      <audio
+        id="game-over-music"
+        src="sounds/game-over.mp3"
+        preload="auto"
+      ></audio>
+      <audio id="win" src="sounds/winning.mp3" preload="auto"></audio>
+      <audio
+        id="game-music"
+        src="sounds/game-music.mp3"
+        preload="auto"
+        loop
+      ></audio>
+    </div>
+    <div class="finish">
+      <div>
+        <div class="finish-but"></div>
+        <div class="leaders">
+          <h2>LeaderBoard</h2>
+          <div class="scores"></div>
+        </div>
+      </div>
+    </div>
+    <script src="main.js"></script>
+  </body>
+</html>
