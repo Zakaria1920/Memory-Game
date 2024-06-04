@@ -12,31 +12,16 @@ let duration = 600;
 let counter;
 let parse = JSON.parse(localStorage.getItem("scores")) || {};
 
-function updateLocStor() {
-  // Setting name and score
-  if (!parse.names) parse.names = {};
-  if (!parse.names[nam.innerHTML]) parse.names[nam.innerHTML] = [];
-  parse.names[nam.innerHTML].push(
-    parseInt(parseInt(timerCount.innerHTML) / (parseInt(tries.innerHTML) || 1))
-  );
-  parse.names[nam.innerHTML].sort((a, b) => a - b);
-  let sortedArr = Object.entries(parse.names);
-  sortedArr.sort((a, b) => b[1][b[1].length - 1] - a[1][a[1].length - 1]);
-  parse.names = Object.fromEntries(sortedArr);
-
-  localStorage.setItem("scores", JSON.stringify(parse));
-}
-
+// Click event
 start.addEventListener("click", () => {
   const yourName = prompt("What Is Your Name") || "Unknown";
   nam.innerHTML = yourName;
   control.remove();
   qs("#game-music").play();
-  genImgs();
+  genImgs(shuffle([...Array(blocks.length).keys()]));
 });
 
-let orderRange = [...Array(blocks.length).keys()];
-
+// Shuffle the array
 function shuffle(array) {
   let current = array.length,
     temp,
@@ -54,11 +39,11 @@ function shuffle(array) {
     // [3] Random element = current element in stash
     array[random] = temp;
   }
+  return array;
 }
 
-shuffle(orderRange);
-
-const genImgs = () => {
+// Generate images
+function genImgs(orderRange) {
   if (select.value > 30) qs(".container").style.width = "761px";
   for (let i = 0; i < select.value; i++) {
     [...blocks][i].style.display = "block";
@@ -76,20 +61,38 @@ const genImgs = () => {
   setTimeout(rotateBlock, 700);
   setTimeout(rotateBlock, 1400);
   setTimeout(timer, 1400);
-};
+}
 
+function rotateBlock() {
+  blocks.forEach((bloc) => bloc.classList.toggle("is-flipped"));
+}
+
+function timer() {
+  counter = setInterval(() => {
+    timerCount.innerHTML--;
+    if (timerCount.innerHTML == 0) {
+      clearInterval(counter);
+      qs("#game-music").pause();
+      qs("#game-over-music").play();
+      block.classList.add("no-clicking");
+      finish("Game Over");
+    }
+  }, 1000);
+}
+
+// Check if there are two flipped blocks
 function flipBlock(selectedBlock) {
   // Add Class is-flipped
   selectedBlock.classList.add("is-flipped");
   // Collect all flipped cards
-  let allFlippedBlocks = [...blocks].filter((flippedBlock) =>
+  let flippedBlocks = [...blocks].filter((flippedBlock) =>
     flippedBlock.classList.contains("is-flipped")
   );
   // If there is two selected blocks
-  if (allFlippedBlocks.length === 2) {
+  if (flippedBlocks.length === 2) {
     // Stop clicking
     stopClicking();
-    matchedBlocks(allFlippedBlocks[0], allFlippedBlocks[1]);
+    matchedBlocks(flippedBlocks[0], flippedBlocks[1]);
   }
 }
 
@@ -100,6 +103,7 @@ function stopClicking() {
   setTimeout(() => block.classList.remove("no-clicking"), duration);
 }
 
+// check if the first flipped block is equal to the second
 function matchedBlocks(firstBlock, lastBlock) {
   if (firstBlock.dataset.technology === lastBlock.dataset.technology) {
     // Remove is-flipped class
@@ -108,13 +112,14 @@ function matchedBlocks(firstBlock, lastBlock) {
     // Add flipped class
     firstBlock.classList.add("flipped");
     lastBlock.classList.add("flipped");
+    // Add success sound after half second
     setTimeout(() => {
       qs("#success").play();
     }, 500);
   } else {
     setTimeout(() => {
       tries.innerHTML++;
-      let counter =
+      let count =
         select.value > 10
           ? 10
           : select.value > 20
@@ -124,39 +129,19 @@ function matchedBlocks(firstBlock, lastBlock) {
           : select.value > 40
           ? 18
           : 5;
-      if (tries.innerHTML == counter) {
+      if (tries.innerHTML == count) {
         clearInterval(counter);
         qs("#game-music").pause();
         qs("#game-over-music").play();
         block.classList.add("no-clicking");
-        updateLocStor();
-        leaderBoard();
         finish("Game Over");
+      } else {
+        firstBlock.classList.remove("is-flipped");
+        lastBlock.classList.remove("is-flipped");
       }
-      firstBlock.classList.remove("is-flipped");
-      lastBlock.classList.remove("is-flipped");
     }, duration);
     setTimeout(() => qs("#fail").play(), 500);
   }
-}
-
-const rotateBlock = () => {
-  blocks.forEach((bloc) => bloc.classList.toggle("is-flipped"));
-};
-
-function timer() {
-  counter = setInterval(() => {
-    timerCount.innerHTML--;
-    if (timerCount.innerHTML == 0) {
-      clearInterval(counter);
-      qs("#game-music").pause();
-      qs("#game-over-music").play();
-      block.classList.add("no-clicking");
-      updateLocStor();
-      leaderBoard();
-      finish("Game Over");
-    }
-  }, 1000);
 }
 
 function amIWin() {
@@ -169,28 +154,17 @@ function amIWin() {
   if (isAllFlipped.length == select.value) {
     clearInterval(counter);
     block.classList.add("no-clicking");
-    qs("#success").pause();
-    qs("#game-music").pause();
-    qs("#win").play();
-    updateLocStor();
-    leaderBoard();
-    finish("You Win");
+    setTimeout(() => {
+      qs("#game-music").pause();
+      qs("#win").play();
+      finish("You Win");
+    }, duration);
   }
-}
-
-function finish(message) {
-  qs(".finish-but").innerHTML = message;
-  setTimeout(() => {
-    qs(".finish").style.display = "block";
-    setTimeout(() => (qs(".finish").style.opacity = "1"), 500);
-    setTimeout(() => (qs(`.finish-but`).style.transform = "scale(1)"), 1000);
-    setTimeout(() => (qs(".leaders").style.transform = "scale(1)"), 2000);
-  }, 500);
 }
 
 function leaderBoard() {
   qs(".scores").innerHTML = "";
-  for (let name in parse.names) {
+  for (let name in parse) {
     let row = document.createElement("div");
     row.classList.add("info");
     let nameSpan = document.createElement("span");
@@ -198,9 +172,53 @@ function leaderBoard() {
     let score = document.createElement("span");
     score.classList.add("score");
     nameSpan.innerHTML = name;
-    score.innerHTML = parse.names[name][parse.names[name].length - 1];
+    score.innerHTML = parse[name];
     row.appendChild(nameSpan);
     row.appendChild(score);
     qs(".scores").appendChild(row);
   }
+}
+
+function finish(message) {
+  // update local storage
+  if (!parse[nam.innerHTML]) parse[nam.innerHTML] = 0;
+  if (message === "You Win") {
+    if (+timerCount.innerHTML > 30 && +tries.innerHTML < 3) {
+      parse[nam.innerHTML] = parse[nam.innerHTML] + 15;
+    }
+    if (+timerCount.innerHTML < 30 && +tries.innerHTML > 3) {
+      parse[nam.innerHTML] = parse[nam.innerHTML] + 5;
+    }
+    if (+timerCount.innerHTML > 30 || +tries.innerHTML < 3) {
+      parse[nam.innerHTML] = parse[nam.innerHTML] + 10;
+    }
+  }
+  if (message === "Game Over") {
+    if (+timerCount.innerHTML > 30 && +tries.innerHTML < 3) {
+      if (parse[nam.innerHTML] !== 0)
+        parse[nam.innerHTML] = parse[nam.innerHTML] - 5;
+    }
+    if (+timerCount.innerHTML < 30 && +tries.innerHTML > 3) {
+      if (
+        parse[nam.innerHTML] !== 0 &&
+        parse[nam.innerHTML] !== 5 &&
+        parse[nam.innerHTML] !== 10
+      )
+        parse[nam.innerHTML] = parse[nam.innerHTML] - 15;
+    }
+    if (+timerCount.innerHTML > 30 || +tries.innerHTML < 3) {
+      if (parse[nam.innerHTML] !== 0 && parse[nam.innerHTML] !== 5)
+        parse[nam.innerHTML] = parse[nam.innerHTML] - 10;
+    }
+  }
+  localStorage.setItem("scores", JSON.stringify(parse));
+
+  leaderBoard();
+  qs(".finish-but").innerHTML = message;
+  setTimeout(() => {
+    qs(".finish").style.display = "block";
+    setTimeout(() => (qs(".finish").style.opacity = "1"), 500);
+    setTimeout(() => (qs(`.finish-but`).style.transform = "scale(1)"), 1000);
+    setTimeout(() => (qs(".leaders").style.transform = "scale(1)"), 2000);
+  }, 500);
 }
