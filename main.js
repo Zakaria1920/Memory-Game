@@ -1,5 +1,7 @@
 const qs = (selector) => document.querySelector(selector);
 
+// hello zakaria
+
 const control = qs(".control-buttons");
 const start = qs(".control-buttons span");
 const nam = qs(".name span");
