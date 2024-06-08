@@ -1,7 +1,5 @@
 const qs = (selector) => document.querySelector(selector);
 
-// hello zakaria
-
 const control = qs(".control-buttons");
 const start = qs(".control-buttons span");
 const nam = qs(".name span");
@@ -57,7 +55,7 @@ function genImgs(orderRange) {
     bloc.addEventListener("click", () => {
       flipBlock(bloc);
       qs("#click").play();
-      amIWin();
+      didIWin();
     });
   });
   setTimeout(rotateBlock, 700);
@@ -146,7 +144,7 @@ function matchedBlocks(firstBlock, lastBlock) {
   }
 }
 
-function amIWin() {
+function didIWin() {
   // Get all flipped blocks
   let isAllFlipped = [...blocks].filter((bloc) =>
     bloc.classList.contains("flipped")
