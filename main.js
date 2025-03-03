@@ -2,11 +2,11 @@ const qs = (selector) => document.querySelector(selector);
 
 const control = qs(".control-buttons");
 const start = qs(".control-buttons span");
+const select = qs(".select");
 const nam = qs(".name span");
 const tries = qs(".tries span");
 const block = qs(".blocks");
 const timerCount = qs(".timer");
-const select = qs(".select");
 let blocks = document.querySelectorAll(".game-block");
 let duration = 600;
 let counter;
@@ -71,11 +71,8 @@ function timer() {
   counter = setInterval(() => {
     timerCount.innerHTML--;
     if (timerCount.innerHTML == 0) {
-      clearInterval(counter);
-      qs("#game-music").pause();
-      qs("#game-over-music").play();
-      block.classList.add("no-clicking");
-      finish("Game Over");
+      youLost();
+      finish(false);
     }
   }, 1000);
 }
@@ -130,11 +127,8 @@ function matchedBlocks(firstBlock, lastBlock) {
           ? 18
           : 5;
       if (tries.innerHTML == count) {
-        clearInterval(counter);
-        qs("#game-music").pause();
-        qs("#game-over-music").play();
-        block.classList.add("no-clicking");
-        finish("Game Over");
+        youLost();
+        finish(false);
       } else {
         firstBlock.classList.remove("is-flipped");
         lastBlock.classList.remove("is-flipped");
@@ -157,12 +151,13 @@ function didIWin() {
     setTimeout(() => {
       qs("#game-music").pause();
       qs("#win").play();
-      finish("You Win");
+      finish(true);
     }, duration);
   }
 }
 
 function leaderBoard() {
+  parse = sortingObj(parse);
   qs(".scores").innerHTML = "";
   for (let name in parse) {
     let row = document.createElement("div");
@@ -182,43 +177,54 @@ function leaderBoard() {
 function finish(message) {
   // update local storage
   if (!parse[nam.innerHTML]) parse[nam.innerHTML] = 0;
-  if (message === "You Win") {
+  if (message) {
     if (+timerCount.innerHTML > 30 && +tries.innerHTML < 3) {
-      parse[nam.innerHTML] = parse[nam.innerHTML] + 15;
+      parse[nam.innerHTML] += 15;
+    } else if (+timerCount.innerHTML < 30 && +tries.innerHTML > 3) {
+      parse[nam.innerHTML] += 5;
+    } else {
+      parse[nam.innerHTML] += 10;
     }
-    if (+timerCount.innerHTML < 30 && +tries.innerHTML > 3) {
-      parse[nam.innerHTML] = parse[nam.innerHTML] + 5;
-    }
-    if (+timerCount.innerHTML > 30 || +tries.innerHTML < 3) {
-      parse[nam.innerHTML] = parse[nam.innerHTML] + 10;
-    }
-  }
-  if (message === "Game Over") {
-    if (+timerCount.innerHTML > 30 && +tries.innerHTML < 3) {
-      if (parse[nam.innerHTML] !== 0)
-        parse[nam.innerHTML] = parse[nam.innerHTML] - 5;
-    }
-    if (+timerCount.innerHTML < 30 && +tries.innerHTML > 3) {
-      if (
-        parse[nam.innerHTML] !== 0 &&
-        parse[nam.innerHTML] !== 5 &&
-        parse[nam.innerHTML] !== 10
-      )
-        parse[nam.innerHTML] = parse[nam.innerHTML] - 15;
-    }
-    if (+timerCount.innerHTML > 30 || +tries.innerHTML < 3) {
-      if (parse[nam.innerHTML] !== 0 && parse[nam.innerHTML] !== 5)
-        parse[nam.innerHTML] = parse[nam.innerHTML] - 10;
+  } else {
+    if (
+      +timerCount.innerHTML > 30 &&
+      +tries.innerHTML < 3 &&
+      parse[nam.innerHTML] > 0
+    ) {
+      parse[nam.innerHTML] -= 5;
+    } else if (
+      +timerCount.innerHTML < 30 &&
+      +tries.innerHTML > 3 &&
+      parse[nam.innerHTML] > 15
+    ) {
+      parse[nam.innerHTML] -= 15;
+    } else if (
+      (+timerCount.innerHTML > 30 || +tries.innerHTML < 3) &&
+      parse[nam.innerHTML] > 5
+    ) {
+      parse[nam.innerHTML] -= 10;
     }
   }
   localStorage.setItem("scores", JSON.stringify(parse));
 
   leaderBoard();
-  qs(".finish-but").innerHTML = message;
+  qs(".finish-but").innerHTML = message ? "You Win" : "You Lost";
   setTimeout(() => {
     qs(".finish").style.display = "block";
     setTimeout(() => (qs(".finish").style.opacity = "1"), 500);
     setTimeout(() => (qs(`.finish-but`).style.transform = "scale(1)"), 1000);
     setTimeout(() => (qs(".leaders").style.transform = "scale(1)"), 2000);
   }, 500);
+}
+
+function youLost() {
+  clearInterval(counter);
+  qs("#game-music").pause();
+  qs("#game-over-music").play();
+  block.classList.add("no-clicking");
+}
+let object = { z: 1, b: 2, c: 3, e: 4 };
+function sortingObj(obj) {
+  const sortedEntries = Object.entries(obj).sort((a, b) => b[1] - a[1]);
+  return Object.fromEntries(sortedEntries);
 }
